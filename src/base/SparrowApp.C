@@ -3,6 +3,7 @@
 #include "AppFactory.h"
 #include "ModulesApp.h"
 #include "MooseSyntax.h"
+#include "TMAP8App.h"
 
 InputParameters
 SparrowApp::validParams()
@@ -27,6 +28,8 @@ SparrowApp::registerAll(Factory & f, ActionFactory & af, Syntax & s)
   Registry::registerObjectsTo(f, {"SparrowApp"});
   Registry::registerActionsTo(af, {"SparrowApp"});
 
+  TMAP8App::registerAll(f, af, s);
+
   /* register custom execute flags, action syntax, etc. here */
 }
 
@@ -34,6 +37,7 @@ void
 SparrowApp::registerApps()
 {
   registerApp(SparrowApp);
+  TMAP8App::registerApps();
 }
 
 /***************************************************************************************************
