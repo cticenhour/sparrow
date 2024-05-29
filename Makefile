@@ -3,16 +3,21 @@
 ###############################################################################
 #
 # Optional Environment variables
+# TMAP8_DIR        - Root directory of the TMAP8 project
 # MOOSE_DIR        - Root directory of the MOOSE project
 #
 ###############################################################################
-# Use the MOOSE submodule if it exists and MOOSE_DIR is not set
-MOOSE_SUBMODULE    := $(CURDIR)/moose
-ifneq ($(wildcard $(MOOSE_SUBMODULE)/framework/Makefile),)
-  MOOSE_DIR        ?= $(MOOSE_SUBMODULE)
+# Use the TMAP8 submodule if it exists and TMAP8_DIR is not set
+# If it doesn't exist, and TMAP8_DIR is not set, then look for it adjacent to the application
+TMAP8_SUBMODULE    := $(CURDIR)/TMAP8
+ifneq ($(wildcard $(TMAP8_SUBMODULE)/Makefile),)
+  TMAP8_DIR        ?= $(TMAP8_SUBMODULE)
 else
-  MOOSE_DIR        ?= $(shell dirname `pwd`)/moose
+  TMAP8_DIR        ?= $(shell dirname `pwd`)/TMAP8
 endif
+
+# Use the MOOSE submodule within TMAP8 if MOOSE_DIR is not set
+MOOSE_DIR          ?= $(TMAP8_DIR)/moose
 
 # framework
 FRAMEWORK_DIR      := $(MOOSE_DIR)/framework
@@ -26,35 +31,43 @@ include $(FRAMEWORK_DIR)/moose.mk
 
 ALL_MODULES                 := no
 
-CHEMICAL_REACTIONS          := no
+CHEMICAL_REACTIONS          := yes
 CONTACT                     := no
 ELECTROMAGNETICS            := no
 EXTERNAL_PETSC_SOLVER       := no
-FLUID_PROPERTIES            := no
+FLUID_PROPERTIES            := yes
 FSI                         := no
 FUNCTIONAL_EXPANSION_TOOLS  := no
 GEOCHEMISTRY                := no
-HEAT_TRANSFER               := no
+HEAT_TRANSFER               := yes
 LEVEL_SET                   := no
-MISC                        := no
-NAVIER_STOKES               := no
+MISC                        := yes
+NAVIER_STOKES               := yes
 OPTIMIZATION                := no
 PERIDYNAMICS                := no
-PHASE_FIELD                 := no
+PHASE_FIELD                 := yes
 POROUS_FLOW                 := no
-RAY_TRACING                 := no
+RAY_TRACING                 := yes
 REACTOR                     := no
-RDG                         := no
+RDG                         := yes
 RICHARDS                    := no
-SOLID_MECHANICS             := no
+SCALAR_TRANSPORT            := yes
+SOLID_MECHANICS             := yes
+SOLID_PROPERTIES            := yes
 STOCHASTIC_TOOLS            := no
-THERMAL_HYDRAULICS          := no
+THERMAL_HYDRAULICS          := yes
 XFEM                        := no
 
 include $(MOOSE_DIR)/modules/modules.mk
 ###############################################################################
 
-# dep apps
+# TMAP8
+APPLICATION_DIR    := $(TMAP8_DIR)
+APPLICATION_NAME   := TMAP8
+GEN_REVISION       := no
+include            $(FRAMEWORK_DIR)/app.mk
+
+# Sparrow
 APPLICATION_DIR    := $(CURDIR)
 APPLICATION_NAME   := sparrow
 BUILD_EXEC         := yes
