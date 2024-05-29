@@ -1,0 +1,6 @@
+Applications:
+    sparrow:
+        app_types:
+            - SparrowApp
+        content_directory: ${ROOT_DIR}/doc/content
+        log_default: WARNING
